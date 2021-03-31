@@ -1,0 +1,37 @@
+---
+#Bringing Down the stack
+- hosts: loadbalancer
+    tasks:
+      service:
+        name: nginx
+        state: removed
+      become: true
+
+- hosts: webserver
+    tasks:
+      service:
+        name: httpd
+        state: removed
+      become: true
+
+# Restart Databse
+-hosts: Database
+  tasks:
+    service:
+      name: mysqld
+      state: removed
+    become: true
+
+#Bring Up Stack
+- hosts: loadbalancer
+    tasks:
+      service:
+        name: nginx
+        state: started
+      become: true
+
+- hosts:
+    tasks:
+      name: httpd
+      state: started
+    become: true

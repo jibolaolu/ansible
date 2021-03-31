@@ -1,0 +1,32 @@
+---
+- hosts: Servers
+  become: true
+  tasks: 
+    - name: Simple Pong
+      ping:
+
+    - name: Install Httpd
+      yum:
+        name: httpd
+        state: removed
+
+
+    - name: Start Web-Server
+      service:
+        name: httpd
+        state: stopped
+
+
+    - name: Install Wget
+      yum:
+        name: wget
+        state: present
+
+
+    - name: Install Telnet
+      yum:
+        name: telnet
+        state: present
+
+
+

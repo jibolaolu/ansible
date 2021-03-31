@@ -1,0 +1,6 @@
+mysql_root_password: Password1
+database:
+  host: 127.0.0.1
+  name: appdb
+  username: codeigniter
+  password: Password2

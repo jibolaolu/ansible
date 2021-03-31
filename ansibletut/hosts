@@ -1,0 +1,10 @@
+[Servers]
+192.168.0.40 ansible_user=cenots02
+192.168.0.46 ansible_user=mgmt
+192.168.0.51 ansible_user=centos03
+192.168.0.52 ansible_user-centos04
+
+
+
+
+

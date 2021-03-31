@@ -1,0 +1,10 @@
+---
+hosts: loadbalancer
+become: true
+tasks:
+
+  - name: Add PHP Repository
+    yum_repository:
+      name: epel
+      description: PHP Repo
+      base_url:

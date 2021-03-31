@@ -1,0 +1,21 @@
+- hosts: webserver
+  become: true
+  vars_files:
+    - db_vars.yml
+  roles:
+    - bjss
+
+  pre_tasks:
+    - name: Create a developer group
+      group:
+        name: developers
+        state: present
+    - name: Create cidev user
+      user:
+        name: cidev
+        comment: CodeIgniter User
+        group: developers
+        state: present
+
+
+

@@ -1,0 +1,17 @@
+[Servers]
+cenots02@192.168.0.40 ansible_user=cenots02
+mgmt@192.168.0.46 ansible_user=mgmt
+centos03@192.168.0.51 ansible_user=centos03
+centos04@192.168.0.52 ansible_user=centos04
+
+[loadbalancer]
+cenots02@192.168.0.40 ansible_user=cenots02
+
+[webserver]
+centos03@192.168.0.51 ansible_user=centos03
+
+[Database]
+centos04@192.168.0.52 ansible_user=centos04
+
+[Control]
+centos7@192.168.0.31  ansible_connection=local

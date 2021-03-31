@@ -1,0 +1,59 @@
+---
+- hosts: webserver
+  tasks:
+    - name: Install Apache2 as WebServer
+      yum:
+        name: "{{ item }}"
+        state: removed
+      become: true
+      with_items:
+        - httpd
+        - python3
+        - python3-pip
+        - python3-virtualenv
+
+    - name: Install wsgi using Pip
+      yum:
+        name: mod_wsgi
+        state: present
+      become: true
+
+    - name: Start the webserver
+      service:
+        name: httpd
+        state: restarted
+        enabled: yes
+      become: true
+
+    - name: Copy demo app to WebServer
+      copy:
+        src: /home/centos7/ansibletut/app/
+        dest: /var/www/demo
+        mode: 0755
+      become: true
+      notify:
+        restart httpd
+
+    - name: Copy apache Virtualhost Config
+      copy:
+        src: /home/centos7/ansibletut/demo.conf
+        dest: /etc/httpd/sites-available
+      become: true
+      notify:
+        restart httpd
+
+    - name: Set up V.Env
+      pip:
+        requirements: /var/www/demo/requirements.txt
+        virtualenv: /user/home/venvs/myenv
+        virtualenv_python: python3.6
+      notify:
+        restart httpd
+
+  handlers:
+    - name: restart httpd
+      service:
+        name: httpd
+        state: restarted
+      become: true
+

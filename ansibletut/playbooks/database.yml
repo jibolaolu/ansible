@@ -1,0 +1,29 @@
+---
+- hosts: Database
+  tasks:
+    - name: Install Mysql repository
+      yum:
+        name: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+      become: true
+
+    - name: Upgrade Yum Packages
+      yum:
+        name: '*'
+        state: present
+
+    - name: Install MySql Server
+      yum:
+        name: mysql-server
+        state: removed
+        update_cache: yes
+      become: true
+
+    - name: Start Mysql-Server
+      service:
+        name: mysqld
+        state: started
+        enabled: yes
+      become: true
+
+
+

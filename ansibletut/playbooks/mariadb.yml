@@ -1,0 +1,67 @@
+---
+- hosts: Database
+  become: true
+  vars_files:
+    db_vars.yml
+
+  tasks:
+    - name: Ensure MariaDB installed
+      yum:
+        name: "{{ item }}"
+        state: absent
+        update_cache: yes
+      with_items:
+        - MySQL-python
+        - mariadb-server
+
+    - name: Start MariaDB
+      service:
+        name: mariadb
+        state: stopped
+        enabled: true
+
+    - name: Create an APP Database
+      mysql_db:
+        name: "{{ database.name }}"
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        state: present
+
+    - name: Add Root credentials to MariaDB
+      mysql_user:
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        user: root
+        check_implicit_admin: true
+        password: "{{ mysql_root_password }}"
+        host: localhost
+
+    - name: Add an Application User in MariaDB
+      mysql_user:
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        user: "{{ database.username}}"
+        password: "{{ database.password }}"
+        priv: "{{ database.name}}.*:ALL"
+        state: present
+        host: "%"
+
+    - name: Upload the table creation scripts
+      copy:
+        src: /home/centos7/ansibletut/playbooks/create.sql
+        dest: /tmp/
+      tags: tees
+
+    - name: Create Applcation table and add records
+      mysql_db:
+        state: import
+        name: "{{ database.name }}"
+        target: /tmp/create.sql
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+
+
+
+
+
+
